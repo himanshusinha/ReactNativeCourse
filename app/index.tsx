@@ -1,27 +1,47 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
+  const [eneterdText, setEnteredText] = useState("");
+  function goalInputHandler(eneterdText: string) {
+    // add goal to state
+    setEnteredText(enteredText);
+  }
+
+  function addGoalHandler() {
+    // add goal to state
+    console.log("Button Press");
+  }
   return (
-    <View style={styles.container}>
-      <View style={styles.dummyText}>
-        <Text>Another piece of text !</Text>
+    <SafeAreaView style={styles.appContainer}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={goalInputHandler}
+          style={styles.textInput}
+          placeholder="Your current goal"
+        />
+        <Button onPress={addGoalHandler} title="Add Goals" />
       </View>
-      <Text style={styles.dummyText}>Hello World!</Text>
-      <Button title="Tap me!" />
-    </View>
+      <Text>List of Goals ....</Text>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  appContainer: {
+    padding: 50,
   },
-  dummyText: {
-    margin: 16,
-    padding: 16,
-    borderColor: "blue",
-    borderWidth: 2,
+  inputContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    width: "70%",
+    height: 40,
+    padding: 10,
+    marginRight: 10,
   },
 });
 export default Index;
