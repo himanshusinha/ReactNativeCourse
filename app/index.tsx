@@ -4,13 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
   const [eneterdText, setEnteredText] = useState("");
-  function goalInputHandler(eneterdText: string) {
-    // add goal to state
+  function goalInputHandler(enteredText: string) {
     setEnteredText(enteredText);
   }
 
   function addGoalHandler() {
-    // add goal to state
     console.log("Button Press");
   }
   return (
