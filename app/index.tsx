@@ -1,45 +1,46 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import GoalInput from "./components/GoalInput";
+import GoalItem from "./components/GoalItem";
 
 const Index = () => {
-  const [eneterdText, setEnteredText] = useState("");
-  function goalInputHandler(enteredText: string) {
-    setEnteredText(enteredText);
-  }
+  const [courseGoals, setCourseGoals] = useState<string[]>([]);
 
-  function addGoalHandler() {
-    console.log("Button Press");
+  function addGoalHandler(enteredGoalText: string) {
+    setCourseGoals((currentCourseGoals) => [
+      ...currentCourseGoals,
+      enteredGoalText,
+    ]);
+  }
+  function onDeleteGoalHandler() {
+    console.log("On Delete");
   }
   return (
     <SafeAreaView style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onChangeText={goalInputHandler}
-          style={styles.textInput}
-          placeholder="Your current goal"
-        />
-        <Button onPress={addGoalHandler} title="Add Goals" />
-      </View>
-      <Text>List of Goals ....</Text>
+      <GoalInput onAddGoal={addGoalHandler} />
+      <FlatList
+        data={courseGoals}
+        alwaysBounceVertical={false}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => {
+          return (
+            <GoalItem
+              item={item}
+              index={index}
+              onDelete={onDeleteGoalHandler}
+            />
+          );
+        }}
+      />
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   appContainer: {
-    padding: 50,
-  },
-  inputContainer: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: "70%",
-    height: 40,
-    padding: 10,
-    marginRight: 10,
+    padding: 20,
   },
 });
+
 export default Index;
