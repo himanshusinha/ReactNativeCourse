@@ -1,37 +1,56 @@
-import { useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
+export type Goal = {
+  id: string;
+  text: string;
+};
+
 const Index = () => {
-  const [courseGoals, setCourseGoals] = useState<string[]>([]);
+  const [courseGoals, setCourseGoals] = useState<Goal[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  function startAddGoal() {
+    setModalVisible(true);
+  }
+
+  function endAddGoal() {
+    setModalVisible(false);
+  }
 
   function addGoalHandler(enteredGoalText: string) {
-    setCourseGoals((currentCourseGoals) => [
-      ...currentCourseGoals,
-      enteredGoalText,
+    setCourseGoals((current) => [
+      ...current,
+      { text: enteredGoalText, id: Math.random().toString() },
     ]);
+    endAddGoal();
   }
-  function onDeleteGoalHandler() {
-    console.log("On Delete");
+
+  function deleteGoalHandler(id: string) {
+    setCourseGoals((current) => current.filter((g) => g.id !== id));
   }
+
   return (
     <SafeAreaView style={styles.appContainer}>
-      <GoalInput onAddGoal={addGoalHandler} />
+      <View style={{ marginBottom: 16 }}>
+        <Button title="Add New Goal" onPress={startAddGoal} />
+      </View>
+
+      <GoalInput
+        visible={modalVisible}
+        onAddGoal={addGoalHandler}
+        onCancel={endAddGoal}
+      />
+
       <FlatList
         data={courseGoals}
-        alwaysBounceVertical={false}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => {
-          return (
-            <GoalItem
-              item={item}
-              index={index}
-              onDelete={onDeleteGoalHandler}
-            />
-          );
-        }}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <GoalItem item={item} onDelete={deleteGoalHandler} />
+        )}
       />
     </SafeAreaView>
   );
@@ -39,6 +58,7 @@ const Index = () => {
 
 const styles = StyleSheet.create({
   appContainer: {
+    flex: 1,
     padding: 20,
   },
 });
